@@ -13,27 +13,27 @@ Infinity Item Editor Re 是一个面向 **Minecraft 1.21.8 Fabric** 的客户端
 | Fabric API | 0.136.1+1.21.8（编译使用，运行需同版本或更新） |
 | Java | 21 |
 | Mod ID | `infinity_item_editor_re` |
-| 版本 | `1.21.8-Fabric-1.6.1-A` |
+| 版本 | `1.21.8-Fabric-1.6.2-A` |
 | 许可证 | GNU GPL 3.0 |
 
 构建产物：
 
 ```text
-build/libs/infinity_item_editor_re-1.21.8-Fabric-1.6.1-A.jar
+build/libs/infinity_item_editor_re-1.21.8-Fabric-1.6.2-A.jar
 ```
 
 本仓库已附带构建好的产物（无需自行构建即可安装）：
 
 ```text
-dist/infinity_item_editor_re-1.21.8-Fabric-1.6.1-A.jar
-dist/infinity_item_editor_re-1.21.8-Fabric-1.6.1-A-sources.jar
+dist/infinity_item_editor_re-1.21.8-Fabric-1.6.2-A.jar
+dist/infinity_item_editor_re-1.21.8-Fabric-1.6.2-A-sources.jar
 ```
 
 ## 安装
 
 1. 安装 Minecraft 1.21.8 与 Fabric Loader（0.20.1+）。
 2. 将 [Fabric API](https://modrinth.com/mod/fabric-api)（0.136.1+1.21.8 或更新）放入 `mods`。
-3. 将 `infinity_item_editor_re-1.21.8-Fabric-1.6.1-A.jar` 放入 `mods`。
+3. 将 `infinity_item_editor_re-1.21.8-Fabric-1.6.2-A.jar` 放入 `mods`。
 4. 启动游戏，进入创造模式，手持物品按 `U` 打开编辑器。
 
 完整使用教程见 **[docs/USAGE.md](docs/USAGE.md)**（面板说明、快捷键、配置、排错）。
@@ -72,6 +72,14 @@ $env:JAVA_HOME = 'C:\Program Files\Java\jdk-21.0.11'
 ```
 
 ## 更新记录
+
+### 1.6.2（保存不再损坏物品）
+
+- 名称/Lore 改为**直接写 `custom_name` / `lore` 组件**，不再经过旧 NBT 往返；保存时不会改写物品原有的 `custom_data`（服务器插件常把数据存在这里，被改写后物品会被重置成白板）。
+- 「重置」/清理逻辑不再调用 `ItemStackNbt.set(stack, null)`，避免误清空组件。
+- 保存前新增保护：若编辑过程中丢失了原物品的组件（自定义数据、附魔、属性、纹饰等），自动从打开时的原物品补回，并在日志里记录 `restored lost components`。
+- 保存时会把最终物品 NBT 写入 `logs/latest.log`（`Infinity Item Editor save: ...`），便于排查服务器是否二次改写。
+- 读取 Lore 时优先读 `minecraft:lore` 组件，旧 `display.Lore` 仍兼容。
 
 ### 1.6.1（重要修复）
 

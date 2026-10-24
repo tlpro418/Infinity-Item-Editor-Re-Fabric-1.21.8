@@ -22,6 +22,7 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -49,6 +50,7 @@ import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PlayerHeadItem;
 import net.minecraft.world.item.SignItem;
@@ -572,11 +574,20 @@ protected void updateMouseDistance(int mouseX, int mouseY) {
                 : stack.getHoverName().getString();
         this.loreValues.clear();
 
-        CompoundTag display = ItemStackNbt.getElement(stack, DISPLAY_TAG);
-        if (display != null && display.contains(LORE_TAG)) {
-            ListTag lore = display.getListOrEmpty(LORE_TAG);
-            for (int i = 0; i < lore.size(); i++) {
-                this.loreValues.add(readLoreLine(lore.getStringOr(i, "")));
+        if (stack.has(DataComponents.LORE)) {
+            ItemLore lore = stack.get(DataComponents.LORE);
+            if (lore != null) {
+                for (Component line : lore.lines()) {
+                    this.loreValues.add(LegacyText.toLegacyOrPlain(line));
+                }
+            }
+        } else {
+            CompoundTag display = ItemStackNbt.getElement(stack, DISPLAY_TAG);
+            if (display != null && display.contains(LORE_TAG)) {
+                ListTag lore = display.getListOrEmpty(LORE_TAG);
+                for (int i = 0; i < lore.size(); i++) {
+                    this.loreValues.add(readLoreLine(lore.getStringOr(i, "")));
+                }
             }
         }
 
@@ -980,22 +991,12 @@ protected void updateMouseDistance(int mouseX, int mouseY) {
     }
 
     protected void cleanupEmptyDisplayTag() {
-        CompoundTag tag = ItemStackNbt.get(this.previewStack);
-        if (tag == null) {
-            return;
-        }
-        CompoundTag display = tag.getCompoundOrEmpty(DISPLAY_TAG);
-        if (display.isEmpty()) {
-            tag.remove(DISPLAY_TAG);
-        }
-        cleanupEmptyTag();
+        // Intentionally empty: the old implementation rewrote every mapped component from the
+        // legacy NBT view when the view looked empty, which could erase name, lore and enchantments.
     }
 
     protected void cleanupEmptyTag() {
-        CompoundTag tag = ItemStackNbt.get(this.previewStack);
-        if (tag != null && tag.isEmpty()) {
-            ItemStackNbt.set(this.previewStack, null);
-        }
+        // Intentionally empty, see cleanupEmptyDisplayTag().
     }
 
     protected int loreLineSpaces() {

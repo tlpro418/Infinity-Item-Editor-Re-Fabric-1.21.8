@@ -19,6 +19,8 @@ import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -46,6 +48,7 @@ import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PlayerHeadItem;
 import net.minecraft.world.item.SignItem;
@@ -70,6 +73,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
@@ -267,6 +272,8 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
             return;
         }
 
+        restoreLostComponents();
+
         int selected = this.minecraft.player.getInventory().getSelectedSlot();
         int containerSlot = this.targetContainerSlot >= 0
                 ? this.targetContainerSlot
@@ -278,6 +285,7 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
                 return;
             }
 
+            ModSource.LOGGER.info("Infinity Item Editor save: {}", ItemStackNbt.save(inventoryStack));
             this.status = Component.translatable(messageKey("editor_applied"), inventoryStack.getHoverName());
             return;
         }
@@ -296,8 +304,77 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
             return;
         }
 
+        ModSource.LOGGER.info("Infinity Item Editor save: {}", ItemStackNbt.save(inventoryStack));
         this.minecraft.gameMode.handleCreativeModeItemAdd(inventoryStack.copy(), containerSlot);
         this.status = Component.translatable(messageKey("editor_applied"), inventoryStack.getHoverName());
+    }
+
+    private static final List<DataComponentType<?>> PROTECTED_COMPONENTS = List.of(
+            DataComponents.CUSTOM_DATA,
+            DataComponents.ENCHANTMENTS,
+            DataComponents.STORED_ENCHANTMENTS,
+            DataComponents.ATTRIBUTE_MODIFIERS,
+            DataComponents.TRIM,
+            DataComponents.PROFILE,
+            DataComponents.BLOCK_ENTITY_DATA,
+            DataComponents.ENTITY_DATA,
+            DataComponents.POTION_CONTENTS,
+            DataComponents.FIREWORKS,
+            DataComponents.BANNER_PATTERNS,
+            DataComponents.BASE_COLOR,
+            DataComponents.POT_DECORATIONS,
+            DataComponents.CONTAINER,
+            DataComponents.TOOLTIP_DISPLAY,
+            DataComponents.UNBREAKABLE,
+            DataComponents.CHARGED_PROJECTILES,
+            DataComponents.BUNDLE_CONTENTS,
+            DataComponents.MAP_ID,
+            DataComponents.MAP_DECORATIONS,
+            DataComponents.LOCK,
+            DataComponents.CONTAINER_LOOT,
+            DataComponents.RECIPES,
+            DataComponents.INSTRUMENT
+    );
+
+    /**
+     * The legacy NBT view only knows a subset of 1.21 components; a failed conversion used to drop
+     * the rest when saving. Restore anything the original stack had that the edited stack lost,
+     * except name/lore which the user edits directly.
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void restoreLostComponents() {
+        if (this.originalStack.isEmpty() || this.previewStack.isEmpty()) {
+            return;
+        }
+
+        List<DataComponentType<?>> missing = new ArrayList<>();
+        for (DataComponentType<?> type : PROTECTED_COMPONENTS) {
+            if (this.originalStack.has(type) && !this.previewStack.has(type)) {
+                missing.add(type);
+            }
+        }
+        if (missing.isEmpty()) {
+            return;
+        }
+
+        // A single missing component is usually an intentional edit (e.g. clearing enchantments);
+        // two or more means a conversion dropped data, so restore everything that disappeared.
+        boolean catastrophic = missing.size() >= 2;
+        List<String> restored = new ArrayList<>();
+        for (DataComponentType<?> type : missing) {
+            if (catastrophic || type == DataComponents.CUSTOM_DATA) {
+                setComponent(this.previewStack, type, this.originalStack);
+                restored.add(type.toString());
+            }
+        }
+        if (!restored.isEmpty()) {
+            ModSource.LOGGER.warn("Infinity Item Editor: restored lost components before saving: {}", restored);
+        }
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void setComponent(ItemStack target, DataComponentType type, ItemStack source) {
+        target.set(type, source.get(type));
     }
 
     private boolean applySingleplayerInventoryStack(int containerSlot, ItemStack stack) {
@@ -535,24 +612,19 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
     }
 
     protected void applyLoreToStack() {
-        CompoundTag tag = ItemStackNbt.getOrCreate(this.previewStack);
-        CompoundTag display = tag.getCompoundOrEmpty(DISPLAY_TAG);
-        if (this.loreValues.isEmpty()) {
-            display.remove(LORE_TAG);
-        } else {
-            ListTag lore = new ListTag();
-            for (String line : this.loreValues) {
-                lore.add(StringTag.valueOf(ComponentCompat.toJson(LegacyText.parse(line))));
-            }
-            display.put(LORE_TAG, lore);
+        List<Component> lines = new ArrayList<>();
+        for (String line : this.loreValues) {
+            lines.add(line == null || line.isEmpty() ? Component.empty() : LegacyText.parse(line));
+        }
+        while (!lines.isEmpty() && lines.get(lines.size() - 1).getString().isEmpty()) {
+            lines.remove(lines.size() - 1);
         }
 
-        if (display.isEmpty()) {
-            tag.remove(DISPLAY_TAG);
+        if (lines.isEmpty()) {
+            this.previewStack.remove(DataComponents.LORE);
         } else {
-            tag.put(DISPLAY_TAG, display);
+            this.previewStack.set(DataComponents.LORE, new ItemLore(lines));
         }
-        cleanupEmptyTag();
     }
 
     protected void setLoreLine(int line, String value) {

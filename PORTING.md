@@ -92,6 +92,14 @@ Forge 1.20.1 的 `master` 仅用于对照功能行为。
 - `ContainerHelper#loadAllItems/saveAllItems` 改为 `ValueInput` / `ValueOutput`
   （使用 `TagValueInput.create` / `TagValueOutput.createWithContext`）
 
+## 1.6.2 修复记录（保存损坏物品）
+
+- `applyLoreToStack` 直接 `set/remove(DataComponents.LORE)`；`applyNameToStack` 早已直接写 `CUSTOM_NAME`。
+  旧实现通过 `ItemStackNbt.getOrCreate` 修改 `display`，同步回写时会**重写 `custom_data`**，把服务器插件存放的数据抹掉，插件随后把物品重置成普通物品。
+- `cleanupEmptyTag` / `cleanupEmptyDisplayTag` 置空，避免 `ItemStackNbt.set(stack, null)` 把名称、Lore、附魔等已映射组件一起清掉。
+- 保存前 `restoreLostComponents()`：若原物品的受保护组件（`custom_data`、附魔、属性、纹饰、方块实体数据等）在编辑后消失，自动补回；单个组件消失视为用户有意清除，两个及以上视为转换丢失。
+- 保存时输出最终 NBT 到日志，便于判断是客户端丢数据还是服务器二次改写。
+
 ## 1.6.1 修复记录（1.21.8 实际差异）
 
 首版 1.6.0 能编译、能加载，但实测发现三个问题，均已在 1.6.1 修复：

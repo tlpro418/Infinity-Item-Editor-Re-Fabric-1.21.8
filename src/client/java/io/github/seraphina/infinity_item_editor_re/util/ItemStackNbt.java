@@ -280,7 +280,12 @@ public final class ItemStackNbt {
         ItemStack parsed = parseOptionalStack(stackTag);
         if (parsed.isEmpty() && !stack.is(Items.AIR)) {
             applyParseableComponents(stack, stackTag);
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag.copy()));
+            CustomData existing = stack.get(DataComponents.CUSTOM_DATA);
+            CompoundTag merged = existing == null ? new CompoundTag() : existing.copyTag();
+            merged.merge(tag.copy());
+            if (!merged.isEmpty()) {
+                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(merged));
+            }
             return;
         }
 
