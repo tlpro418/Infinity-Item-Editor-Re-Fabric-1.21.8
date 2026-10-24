@@ -1,0 +1,24 @@
+# Build output
+build/
+!build/libs/
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# Dev run directory
+run/
+
+# Logs and local tooling
+*.log
+tools/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+bin/
