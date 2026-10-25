@@ -22,3 +22,6 @@ tools/
 .classpath
 .project
 bin/
+
+# Local test server
+run-server/
