@@ -14,6 +14,7 @@ import io.github.seraphina.infinity_item_editor_re.client.CreativeTabRefresher;
 import io.github.seraphina.infinity_item_editor_re.data.realms.RealmController;
 import io.github.seraphina.infinity_item_editor_re.util.GiveHelper;
 import io.github.seraphina.infinity_item_editor_re.util.PlayerInventorySlots;
+import io.github.seraphina.infinity_item_editor_re.util.SaveVerifier;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.client.gui.GuiGraphics;
@@ -306,11 +307,10 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
 
         String sentNbt = ItemStackNbt.save(inventoryStack).toString();
         ModSource.LOGGER.info("Infinity Item Editor save: {}", sentNbt);
-        this.pendingSaveNbt = sentNbt;
-        this.pendingSaveSlot = containerSlot >= 36 && containerSlot <= 44
+        int inventorySlot = containerSlot >= 36 && containerSlot <= 44
                 ? containerSlot - 36
                 : (containerSlot >= 9 && containerSlot <= 35 ? containerSlot : -1);
-        this.pendingSaveTicks = 0;
+        SaveVerifier.expect(inventoryStack.copy(), sentNbt, inventorySlot);
         this.minecraft.gameMode.handleCreativeModeItemAdd(inventoryStack.copy(), containerSlot);
         this.status = Component.translatable(messageKey("editor_applied"), inventoryStack.getHoverName());
     }

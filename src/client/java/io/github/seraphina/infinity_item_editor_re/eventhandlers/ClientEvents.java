@@ -14,6 +14,7 @@ import io.github.seraphina.infinity_item_editor_re.mixin.client.CreativeModeInve
 import io.github.seraphina.infinity_item_editor_re.util.GiveHelper;
 import io.github.seraphina.infinity_item_editor_re.util.ItemStackNbt;
 import io.github.seraphina.infinity_item_editor_re.util.PlayerInventorySlots;
+import io.github.seraphina.infinity_item_editor_re.util.SaveVerifier;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -73,6 +74,7 @@ public final class ClientEvents {
     }
 
     private static void onClientTick(Minecraft minecraft) {
+        SaveVerifier.tick(minecraft);
         if (minecraft.player == null || minecraft.level == null || minecraft.screen != null) {
             return;
         }

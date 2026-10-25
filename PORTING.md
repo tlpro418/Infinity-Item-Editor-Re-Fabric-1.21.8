@@ -92,6 +92,13 @@ Forge 1.20.1 的 `master` 仅用于对照功能行为。
 - `ContainerHelper#loadAllItems/saveAllItems` 改为 `ValueInput` / `ValueOutput`
   （使用 `TagValueInput.create` / `TagValueOutput.createWithContext`）
 
+## 1.6.4 修复记录（保存诊断）
+
+- 新增 `util/SaveVerifier`：保存时记录发送的 NBT，由 `ClientEvents.onClientTick` 在 60 tick 内比对槽位，
+  不依赖编辑器是否仍然打开。
+- 不一致时输出 `sent=` / `received=` 到日志，聊天栏提示，并复制 `/give` 作为兜底。
+- 用于区分“输入没进去 / 客户端没写对 / 服务端改写”三种情况，特别是非 ASCII（中文）文本的问题定位。
+
 ## 1.6.3 修复记录（服务端兼容）
 
 - `LegacyText.parse` 不再生成 `{text:"",extra:[...]}`，而是以第一段文本作为根组件（`{text:"...",color:...}`），多段时才用 `extra`。这更接近原版 `/give` 生成的组件，降低 ViaVersion/插件转换时丢字段的概率。
