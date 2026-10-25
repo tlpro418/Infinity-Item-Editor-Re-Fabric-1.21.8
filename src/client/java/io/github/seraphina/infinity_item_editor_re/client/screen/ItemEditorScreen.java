@@ -4,6 +4,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.math.Axis;
 import io.github.seraphina.infinity_item_editor_re.ModSource;
+import io.github.seraphina.infinity_item_editor_re.util.ItemStackNbt;
 import io.github.seraphina.infinity_item_editor_re.client.CreativeTabRefresher;
 import io.github.seraphina.infinity_item_editor_re.data.realms.RealmController;
 import io.github.seraphina.infinity_item_editor_re.util.GiveHelper;
@@ -207,12 +208,32 @@ public class ItemEditorScreen extends ItemEditorScreenRendering {
 
     @Override
     public void tick() {
+        verifyPendingSave();
         for (EditBox box : this.tickingBoxes) {
         }
 
         if ((this.activePanel == Panel.ENCHANTMENTS || this.activePanel == Panel.POTION || this.activePanel == Panel.ATTRIBUTES)
                 && Math.abs(this.mouseDist - getRingRadius()) >= RING_HOVER_WIDTH) {
             this.rotOff++;
+        }
+    }
+
+    private void verifyPendingSave() {
+        if (this.pendingSaveNbt == null || this.pendingSaveSlot < 0
+                || this.minecraft == null || this.minecraft.player == null) {
+            return;
+        }
+        this.pendingSaveTicks++;
+        String current = ItemStackNbt.save(this.minecraft.player.getInventory().getItem(this.pendingSaveSlot)).toString();
+        if (current.equals(this.pendingSaveNbt)) {
+            this.pendingSaveNbt = null;
+            return;
+        }
+        if (this.pendingSaveTicks > 40) {
+            ModSource.LOGGER.warn("Infinity Item Editor: the server rewrote the saved item. sent={} received={}",
+                    this.pendingSaveNbt, current);
+            this.status = Component.translatable("message." + ModSource.MODID + ".editor_server_rewrote");
+            this.pendingSaveNbt = null;
         }
     }
 

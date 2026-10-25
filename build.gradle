@@ -13,6 +13,7 @@ base {
 loom {
     splitEnvironmentSourceSets()
 
+
     mods {
         "infinity_item_editor_re" {
             sourceSet sourceSets.main

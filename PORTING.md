@@ -92,6 +92,12 @@ Forge 1.20.1 的 `master` 仅用于对照功能行为。
 - `ContainerHelper#loadAllItems/saveAllItems` 改为 `ValueInput` / `ValueOutput`
   （使用 `TagValueInput.create` / `TagValueOutput.createWithContext`）
 
+## 1.6.3 修复记录（服务端兼容）
+
+- `LegacyText.parse` 不再生成 `{text:"",extra:[...]}`，而是以第一段文本作为根组件（`{text:"...",color:...}`），多段时才用 `extra`。这更接近原版 `/give` 生成的组件，降低 ViaVersion/插件转换时丢字段的概率。
+- 保存后把发送的 NBT 记录下来，在后续 40 tick 内比对服务端同步回来的槽位内容；不一致时提示玩家并在日志输出 `the server rewrote the saved item`，用于区分「客户端没写对」与「服务端改写」。
+- 端到端验证：本地 Fabric 1.21.8 服务端 + 客户端自动进服，保存后服务端回显的组件与发送值一致（名称、两行 Lore、颜色全部保留）。
+
 ## 1.6.2 修复记录（保存损坏物品）
 
 - `applyLoreToStack` 直接 `set/remove(DataComponents.LORE)`；`applyNameToStack` 早已直接写 `CUSTOM_NAME`。

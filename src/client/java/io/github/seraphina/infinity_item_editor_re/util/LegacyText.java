@@ -23,7 +23,7 @@ public final class LegacyText {
             return Component.empty();
         }
 
-        MutableComponent root = Component.empty();
+        MutableComponent root = null;
         Style style = Style.EMPTY;
         StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < text.length(); i++) {
@@ -31,7 +31,7 @@ public final class LegacyText {
             if (current == SECTION && i + 1 < text.length()) {
                 ChatFormatting format = ChatFormatting.getByCode(text.charAt(i + 1));
                 if (format != null) {
-                    append(root, buffer, style);
+                    root = append(root, buffer, style);
                     style = style.applyLegacyFormat(format);
                     i++;
                     continue;
@@ -39,8 +39,8 @@ public final class LegacyText {
             }
             buffer.append(current);
         }
-        append(root, buffer, style);
-        return root;
+        root = append(root, buffer, style);
+        return root == null ? Component.empty() : root;
     }
 
     /** Returns the legacy-code string, or {@code null} when the component is too complex to round-trip. */
@@ -104,12 +104,13 @@ public final class LegacyText {
         return out.toString();
     }
 
-    private static void append(MutableComponent root, StringBuilder buffer, Style style) {
+    private static MutableComponent append(MutableComponent root, StringBuilder buffer, Style style) {
         if (buffer.isEmpty()) {
-            return;
+            return root;
         }
-        root.append(Component.literal(buffer.toString()).withStyle(style));
+        MutableComponent part = Component.literal(buffer.toString()).withStyle(style);
         buffer.setLength(0);
+        return root == null ? part : root.append(part);
     }
 
     private static boolean appendStyleCodes(StringBuilder out, Style style) {

@@ -238,6 +238,9 @@ abstract class ItemEditorScreenState extends Screen {
     protected final int parentTradeIndex;
     protected final int parentTradeSlot;
     protected ItemStack previewStack;
+    protected String pendingSaveNbt;
+    protected int pendingSaveSlot = -1;
+    protected int pendingSaveTicks;
     protected Panel activePanel = Panel.ITEM;
     protected Component status = Component.empty();
 

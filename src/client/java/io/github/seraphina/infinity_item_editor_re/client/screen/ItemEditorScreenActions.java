@@ -304,7 +304,13 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
             return;
         }
 
-        ModSource.LOGGER.info("Infinity Item Editor save: {}", ItemStackNbt.save(inventoryStack));
+        String sentNbt = ItemStackNbt.save(inventoryStack).toString();
+        ModSource.LOGGER.info("Infinity Item Editor save: {}", sentNbt);
+        this.pendingSaveNbt = sentNbt;
+        this.pendingSaveSlot = containerSlot >= 36 && containerSlot <= 44
+                ? containerSlot - 36
+                : (containerSlot >= 9 && containerSlot <= 35 ? containerSlot : -1);
+        this.pendingSaveTicks = 0;
         this.minecraft.gameMode.handleCreativeModeItemAdd(inventoryStack.copy(), containerSlot);
         this.status = Component.translatable(messageKey("editor_applied"), inventoryStack.getHoverName());
     }

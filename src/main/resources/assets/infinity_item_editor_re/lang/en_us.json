@@ -544,5 +544,6 @@
   "screen.infinity_item_editor_re.registry_group.all_mods": "All mods",
   "screen.infinity_item_editor_re.saved": "Saved",
   "screen.infinity_item_editor_re.spawnegg.choice.empty": "(none)",
-  "screen.infinity_item_editor_re.title": "Infinity Item Editor Re"
+  "screen.infinity_item_editor_re.title": "Infinity Item Editor Re",
+  "message.infinity_item_editor_re.editor_server_rewrote": "The server rewrote the saved item (plugin/ViaVersion limit). Use Shift+Drop to copy /give."
 }
