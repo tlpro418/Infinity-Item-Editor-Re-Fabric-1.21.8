@@ -9,31 +9,31 @@ Infinity Item Editor Re 是一个面向 **Minecraft 1.21.8 Fabric** 的客户端
 | 项目 | 内容 |
 | --- | --- |
 | Minecraft | 1.21.8 |
-| 加载器 | Fabric Loader 0.20.1 及以上 |
+| 加载器 | Fabric Loader 0.16.0 及以上 |
 | Fabric API | 0.136.1+1.21.8（编译使用，运行需同版本或更新） |
 | Java | 21 |
 | Mod ID | `infinity_item_editor_re` |
-| 版本 | `1.21.8-Fabric-1.6.5-A` |
+| 版本 | `1.21.8-Fabric-1.6.6-A` |
 | 许可证 | GNU GPL 3.0 |
 
 构建产物：
 
 ```text
-build/libs/infinity_item_editor_re-1.21.8-Fabric-1.6.5-A.jar
+build/libs/infinity_item_editor_re-1.21.8-Fabric-1.6.6-A.jar
 ```
 
 本仓库已附带构建好的产物（无需自行构建即可安装）：
 
 ```text
-dist/infinity_item_editor_re-1.21.8-Fabric-1.6.5-A.jar
-dist/infinity_item_editor_re-1.21.8-Fabric-1.6.5-A-sources.jar
+dist/infinity_item_editor_re-1.21.8-Fabric-1.6.6-A.jar
+dist/infinity_item_editor_re-1.21.8-Fabric-1.6.6-A-sources.jar
 ```
 
 ## 安装
 
-1. 安装 Minecraft 1.21.8 与 Fabric Loader（0.20.1+）。
+1. 安装 Minecraft 1.21.8 与 Fabric Loader（0.16.0+）。
 2. 将 [Fabric API](https://modrinth.com/mod/fabric-api)（0.136.1+1.21.8 或更新）放入 `mods`。
-3. 将 `infinity_item_editor_re-1.21.8-Fabric-1.6.5-A.jar` 放入 `mods`。
+3. 将 `infinity_item_editor_re-1.21.8-Fabric-1.6.6-A.jar` 放入 `mods`。
 4. 启动游戏，进入创造模式，手持物品按 `U` 打开编辑器。
 
 完整使用教程见 **[docs/USAGE.md](docs/USAGE.md)**（面板说明、快捷键、配置、排错）。
@@ -72,6 +72,13 @@ $env:JAVA_HOME = 'C:\Program Files\Java\jdk-21.0.11'
 ```
 
 ## 更新记录
+
+### 1.6.6（放宽 Fabric Loader 版本要求）
+
+- `fabric.mod.json` 不再把编译用的 Loader 0.20.1 当作最低要求，改为 **Fabric Loader >= 0.16.0**（代码只用了 `FabricLoader#getModContainer`，旧版 Loader 同样支持）。
+- Minecraft 依赖从精确 `1.21.8` 放宽为 `>=1.21.8 <1.21.9`。
+- `fabric-api` 仍为 `*`，由 Fabric API 自身约束与 Minecraft 的匹配。
+
 
 ### 1.6.5（兼容 WLProtocol 服务器字段）
 
