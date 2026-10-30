@@ -92,6 +92,12 @@ Forge 1.20.1 的 `master` 仅用于对照功能行为。
 - `ContainerHelper#loadAllItems/saveAllItems` 改为 `ValueInput` / `ValueOutput`
   （使用 `TagValueInput.create` / `TagValueOutput.createWithContext`）
 
+## 1.6.5 修复记录（WLProtocol 服务器字段）
+
+- 新增 `util/LegacyPluginCompat`：当物品 `custom_data` 中存在 `WLProtocol*` 键时，把编辑后的名称/Lore 写回
+  `display.Name` / `display.Lore` 以及所有以 `Name` / `Lore` 结尾的键；根据原值是否为 JSON 决定写纯文本还是 JSON，保留 `color`、协议标记等其他字段。
+- `ItemEditorScreenActions` 在保存前调用该同步；随后仍由 `SaveVerifier` 校验服务端回显。
+
 ## 1.6.4 修复记录（保存诊断）
 
 - 新增 `util/SaveVerifier`：保存时记录发送的 NBT，由 `ClientEvents.onClientTick` 在 60 tick 内比对槽位，

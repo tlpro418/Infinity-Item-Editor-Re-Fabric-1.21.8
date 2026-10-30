@@ -25,3 +25,5 @@ bin/
 
 # Local test server
 run-server/
+
+logs/

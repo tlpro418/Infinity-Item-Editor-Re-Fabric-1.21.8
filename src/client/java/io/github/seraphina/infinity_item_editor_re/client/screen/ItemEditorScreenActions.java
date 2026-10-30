@@ -5,6 +5,7 @@ import io.github.seraphina.infinity_item_editor_re.util.ItemStackCompat;
 import io.github.seraphina.infinity_item_editor_re.util.ComponentCompat;
 
 import io.github.seraphina.infinity_item_editor_re.util.ItemStackNbt;
+import io.github.seraphina.infinity_item_editor_re.util.LegacyPluginCompat;
 import io.github.seraphina.infinity_item_editor_re.util.LegacyText;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -49,6 +50,7 @@ import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PlayerHeadItem;
@@ -479,6 +481,7 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
             tryApplyDamage(true);
             applyNameToStack();
             applyLoreToStack();
+            LegacyPluginCompat.sync(this.previewStack, this.nameValue, this.loreValues);
             if (this.activePanel == Panel.SIGN) {
                 applySignToStack();
             }
