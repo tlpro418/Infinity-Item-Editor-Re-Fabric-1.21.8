@@ -92,6 +92,11 @@ Forge 1.20.1 的 `master` 仅用于对照功能行为。
 - `ContainerHelper#loadAllItems/saveAllItems` 改为 `ValueInput` / `ValueOutput`
   （使用 `TagValueInput.create` / `TagValueOutput.createWithContext`）
 
+## 1.7.1 修复记录（净化最小化）
+
+- `NetworkSafeStacks` 改为逐组件测试编码：只移除单独编码失败的组件，避免连带删除名称/Lore。
+- 若 `custom_data` 是坏组件，先提取 `display.Name`/`display.Lore` 写入 `custom_name`/`lore` 组件，再移除 `custom_data`。
+
 ## 1.7.0 修复记录（网络编码崩溃）
 
 - 现场崩溃：`io.netty.handler.codec.EncoderException: Failed to encode packet 'serverbound/minecraft:set_creative_mode_slot'`，
