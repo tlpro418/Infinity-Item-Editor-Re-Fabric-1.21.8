@@ -92,6 +92,12 @@ Forge 1.20.1 的 `master` 仅用于对照功能行为。
 - `ContainerHelper#loadAllItems/saveAllItems` 改为 `ValueInput` / `ValueOutput`
   （使用 `TagValueInput.create` / `TagValueOutput.createWithContext`）
 
+## 1.6.9 修复记录（去除服务器标记）
+
+- 新增 `util/ServerTagStripper`：按 `WLProtocol*`、`display`、`*uuid*` 规则移除 `custom_data` 中的服务端追踪字段。
+- `Config` 增加 `stripServerTags`（默认 false），并支持系统属性覆盖；保存前按开关调用。
+- 用于验证“服务端按标记还原物品”的假设。
+
 ## 1.6.7 修复记录（回滚 WLProtocol 同步）
 
 - `LegacyPluginCompat.sync` 改为由系统属性 `infinity_item_editor_re.syncLegacyPluginData` 控制，默认 **false**。

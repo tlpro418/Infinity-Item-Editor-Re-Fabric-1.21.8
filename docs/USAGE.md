@@ -1,6 +1,6 @@
 # Infinity Item Editor Re — 1.21.8 Fabric 详细使用教程
 
-> 适用于本仓库构建的 `infinity_item_editor_re-1.21.8-Fabric-1.6.8-A.jar`。
+> 适用于本仓库构建的 `infinity_item_editor_re-1.21.8-Fabric-1.6.9-A.jar`。
 > 这是一个**客户端** Mod：服务端通常不用装，但写入物品栏、复制装备等功能需要创造模式权限。
 
 ---
@@ -9,7 +9,7 @@
 
 1. 安装 **Minecraft 1.21.8** + **Fabric Loader 0.20.1 或更新**。
 2. 下载 [Fabric API](https://modrinth.com/mod/fabric-api) `0.136.1+1.21.8` 或更新，放进 `mods`。
-3. 把 `infinity_item_editor_re-1.21.8-Fabric-1.6.8-A.jar` 放进 `mods`。
+3. 把 `infinity_item_editor_re-1.21.8-Fabric-1.6.9-A.jar` 放进 `mods`。
 4. 启动游戏。`mods` 里应能看到 “Infinity Item Editor Re”。
 
 > 只有客户端需要装；联机时服务器没有这个 Mod 也能用，但「保存到物品栏」等操作仍受服务器规则和创造模式权限限制。
@@ -200,6 +200,14 @@
 复制方块/生物时：方块会生成对应物品；生物/玩家/盔甲架会把目标装备复制到你的对应装备槽位。
 
 ---
+
+## 8.5 实验性：去除服务器标记
+
+服务器原生物品通常带有 `custom_data` 追踪字段（如 `WLProtocol_*`、`display`、UUID），在单人改完带回服务器会被识别并还原。
+
+- 在 `config/infinity_item_editor_re.json` 中设置 `"stripServerTags": true`（或启动参数 `-Dinfinity_item_editor_re.stripServerTags=true`）；
+- 保存时会剥离这些字段，物品会以“无标记的新物品”发给服务器；
+- **风险**：部分服务器会直接删除非法物品，默认关闭，请先备份/在测试物品上试。
 
 ## 9. 配置
 

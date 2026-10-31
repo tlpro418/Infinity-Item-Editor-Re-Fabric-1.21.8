@@ -10,12 +10,14 @@ import io.github.seraphina.infinity_item_editor_re.util.LegacyText;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.math.Axis;
+import io.github.seraphina.infinity_item_editor_re.Config;
 import io.github.seraphina.infinity_item_editor_re.ModSource;
 import io.github.seraphina.infinity_item_editor_re.client.CreativeTabRefresher;
 import io.github.seraphina.infinity_item_editor_re.data.realms.RealmController;
 import io.github.seraphina.infinity_item_editor_re.util.GiveHelper;
 import io.github.seraphina.infinity_item_editor_re.util.PlayerInventorySlots;
 import io.github.seraphina.infinity_item_editor_re.util.SaveVerifier;
+import io.github.seraphina.infinity_item_editor_re.util.ServerTagStripper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.client.gui.GuiGraphics;
@@ -276,6 +278,9 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
         }
 
         restoreLostComponents();
+        if (Config.getStripServerTags()) {
+            ServerTagStripper.strip(this.previewStack);
+        }
 
         int selected = this.minecraft.player.getInventory().getSelectedSlot();
         int containerSlot = this.targetContainerSlot >= 0

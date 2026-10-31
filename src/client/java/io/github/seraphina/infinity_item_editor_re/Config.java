@@ -62,6 +62,12 @@ public final class Config {
             "Whether the thief creative tab is shown.",
             "thief_tab"
     );
+    public static final BooleanEntry STRIP_SERVER_TAGS = defineBoolean(
+            "stripServerTags",
+            false,
+            "Experimental: strip WLProtocol/display/UUID tracking keys from custom_data when saving, so the server treats the item as a new one.",
+            "strip_server_tags"
+    );
     public static final BooleanEntry FIREWORK_TAB = defineBoolean(
             "fireworkTab",
             true,
@@ -81,6 +87,7 @@ public final class Config {
     public static boolean headTab = true;
     public static boolean thiefTab = true;
     public static boolean fireworkTab = true;
+    public static boolean stripServerTags = false;
 
     public static final int MAIN_COLOR = colorFromRgba(255, 150, 0, 200);
     public static final int ALT_COLOR = colorFromRgba(255, 50, 20, 75);
@@ -163,6 +170,10 @@ public final class Config {
         save();
     }
 
+    public static boolean getStripServerTags() {
+        return stripServerTags || Boolean.getBoolean("infinity_item_editor_re.stripServerTags");
+    }
+
     public static boolean getIsVoidEnabled() {
         return voidTab;
     }
@@ -200,6 +211,7 @@ public final class Config {
         headTab = HEAD_TAB.get();
         thiefTab = THIEF_TAB.get();
         fireworkTab = FIREWORK_TAB.get();
+        stripServerTags = STRIP_SERVER_TAGS.get();
     }
 
     private static ItemEditorUiMode readItemGuiMode(JsonObject root) {
