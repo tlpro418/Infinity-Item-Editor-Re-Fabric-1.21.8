@@ -547,5 +547,8 @@
   "screen.infinity_item_editor_re.title": "Infinity Item Editor Re",
   "message.infinity_item_editor_re.editor_server_rewrote": "服务器改写了保存的物品（可能是插件/ViaVersion 限制）。可用 Shift+点击「丢弃」复制 /give 命令。",
   "message.infinity_item_editor_re.editor_give_copied": "已把该物品的 /give 命令复制到剪贴板。",
-  "message.infinity_item_editor_re.editor_diagnostic_link": "「点击复制诊断信息」"
+  "message.infinity_item_editor_re.editor_diagnostic_link": "「点击复制诊断信息」",
+  "message.infinity_item_editor_re.editor_server_not_creative": "服务器当前不是创造模式（客户端能力可能是插件伪造的），已复制该物品的 /give 命令。",
+  "message.infinity_item_editor_re.editor_save_sent": "已发送保存请求：%s（服务端接受后生效）",
+  "message.infinity_item_editor_re.editor_give_sent": "已通过 /give 发送：%s（需要服务器命令权限）"
 }

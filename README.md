@@ -13,27 +13,27 @@ Infinity Item Editor Re 是一个面向 **Minecraft 1.21.8 Fabric** 的客户端
 | Fabric API | 0.136.1+1.21.8（编译使用，运行需同版本或更新） |
 | Java | 21 |
 | Mod ID | `infinity_item_editor_re` |
-| 版本 | `1.21.8-Fabric-1.6.7-A` |
+| 版本 | `1.21.8-Fabric-1.6.8-A` |
 | 许可证 | GNU GPL 3.0 |
 
 构建产物：
 
 ```text
-build/libs/infinity_item_editor_re-1.21.8-Fabric-1.6.7-A.jar
+build/libs/infinity_item_editor_re-1.21.8-Fabric-1.6.8-A.jar
 ```
 
 本仓库已附带构建好的产物（无需自行构建即可安装）：
 
 ```text
-dist/infinity_item_editor_re-1.21.8-Fabric-1.6.7-A.jar
-dist/infinity_item_editor_re-1.21.8-Fabric-1.6.7-A-sources.jar
+dist/infinity_item_editor_re-1.21.8-Fabric-1.6.8-A.jar
+dist/infinity_item_editor_re-1.21.8-Fabric-1.6.8-A-sources.jar
 ```
 
 ## 安装
 
 1. 安装 Minecraft 1.21.8 与 Fabric Loader（0.16.0+）。
 2. 将 [Fabric API](https://modrinth.com/mod/fabric-api)（0.136.1+1.21.8 或更新）放入 `mods`。
-3. 将 `infinity_item_editor_re-1.21.8-Fabric-1.6.7-A.jar` 放入 `mods`。
+3. 将 `infinity_item_editor_re-1.21.8-Fabric-1.6.8-A.jar` 放入 `mods`。
 4. 启动游戏，进入创造模式，手持物品按 `U` 打开编辑器。
 
 完整使用教程见 **[docs/USAGE.md](docs/USAGE.md)**（面板说明、快捷键、配置、排错）。
@@ -72,6 +72,14 @@ $env:JAVA_HOME = 'C:\Program Files\Java\jdk-21.0.11'
 ```
 
 ## 更新记录
+
+### 1.6.8（识别伪造创造模式 + /give 兜底）
+
+- 保存时改用服务端同步的 **GameType** 判断：客户端 `instabuild` 可能是插件伪造的，这类服会忽略创造模式写物品包（表现为“已应用、移动后还原”）。
+- 若服务器实际不是创造模式：提示「服务器当前不是创造模式」，并自动复制 `/give`。
+- 保存状态改为「已发送保存请求（服务端接受后生效）」，不再误报“已应用”。
+- **Shift + 点击「保存」**：直接以 `/give` 命令给予物品（需要服务器命令权限），绕过创造模式写包限制。
+
 
 ### 1.6.7（回滚 WLProtocol 自动同步）
 

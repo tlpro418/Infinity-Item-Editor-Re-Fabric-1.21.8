@@ -297,6 +297,20 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
             return;
         }
 
+        if (Screen.hasShiftDown()) {
+            String command = GiveHelper.getStringFromItemStack(inventoryStack);
+            if (command.startsWith("/")) {
+                command = command.substring(1);
+            }
+            this.minecraft.player.connection.sendCommand(command);
+            this.status = Component.translatable(messageKey("editor_give_sent"), inventoryStack.getHoverName());
+            return;
+        }
+        if (this.minecraft.gameMode.getPlayerMode() != net.minecraft.world.level.GameType.CREATIVE) {
+            this.status = Component.translatable(messageKey("editor_server_not_creative"));
+            this.minecraft.keyboardHandler.setClipboard(GiveHelper.getStringFromItemStack(inventoryStack));
+            return;
+        }
         if (!this.minecraft.player.getAbilities().instabuild) {
             this.status = Component.translatable(messageKey("editor_requires_creative"));
             return;
@@ -314,7 +328,7 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
                 : (containerSlot >= 9 && containerSlot <= 35 ? containerSlot : -1);
         SaveVerifier.expect(inventoryStack.copy(), sentNbt, inventorySlot);
         this.minecraft.gameMode.handleCreativeModeItemAdd(inventoryStack.copy(), containerSlot);
-        this.status = Component.translatable(messageKey("editor_applied"), inventoryStack.getHoverName());
+        this.status = Component.translatable(messageKey("editor_save_sent"), inventoryStack.getHoverName());
     }
 
     private static final List<DataComponentType<?>> PROTECTED_COMPONENTS = List.of(
