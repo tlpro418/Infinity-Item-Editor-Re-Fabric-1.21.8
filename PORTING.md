@@ -92,6 +92,14 @@ Forge 1.20.1 的 `master` 仅用于对照功能行为。
 - `ContainerHelper#loadAllItems/saveAllItems` 改为 `ValueInput` / `ValueOutput`
   （使用 `TagValueInput.create` / `TagValueOutput.createWithContext`）
 
+## 1.7.0 修复记录（网络编码崩溃）
+
+- 现场崩溃：`io.netty.handler.codec.EncoderException: Failed to encode packet 'serverbound/minecraft:set_creative_mode_slot'`，
+  发生在从创造标签页取出服务器保存的物品时。
+- 原因：物品组件无法被 `ServerboundSetCreativeModeSlotPacket.STREAM_CODEC` 编码（常见于服务器自定义/跨版本组件）。
+- 新增 `util/NetworkSafeStacks`：用真实 packet codec 试编码；失败时逐个移除组件直到可编码，并记录日志；
+  应用于 Realm/Void 标签页生成与编辑器保存前，避免 netty 编码异常导致断线。
+
 ## 1.6.9 修复记录（去除服务器标记）
 
 - 新增 `util/ServerTagStripper`：按 `WLProtocol*`、`display`、`*uuid*` 规则移除 `custom_data` 中的服务端追踪字段。

@@ -7,6 +7,7 @@ import io.github.seraphina.infinity_item_editor_re.util.ComponentCompat;
 import io.github.seraphina.infinity_item_editor_re.util.CompatRegistries;
 
 import io.github.seraphina.infinity_item_editor_re.util.ItemStackNbt;
+import io.github.seraphina.infinity_item_editor_re.util.NetworkSafeStacks;
 
 import io.github.seraphina.infinity_item_editor_re.Config;
 import io.github.seraphina.infinity_item_editor_re.ModSource;
@@ -104,7 +105,7 @@ public final class CreativeTabRegistry {
 
         if (realmController != null) {
             for (ItemStack stack : realmController.getStackList()) {
-                addUnique(stacks, normalizedTabStack(stack));
+                addUnique(stacks, normalizedTabStack(NetworkSafeStacks.sanitize(stack)));
             }
         }
 
@@ -232,7 +233,7 @@ public final class CreativeTabRegistry {
         VoidController.loadVoidToList(loadedStacks);
         List<ItemStack> stacks = new ArrayList<>(loadedStacks.size());
         for (ItemStack stack : loadedStacks) {
-            addUnique(stacks, normalizedTabStack(stack));
+            addUnique(stacks, normalizedTabStack(NetworkSafeStacks.sanitize(stack)));
         }
 
         if (stacks.isEmpty()) {

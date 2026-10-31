@@ -552,5 +552,6 @@
   "message.infinity_item_editor_re.editor_save_sent": "Save request sent: %s (effective once the server accepts it)",
   "message.infinity_item_editor_re.editor_give_sent": "Sent via /give: %s (requires command permission)",
   "config.infinity_item_editor_re.strip_server_tags.title": "Strip server tags (experimental)",
-  "config.infinity_item_editor_re.strip_server_tags.description": "Remove WLProtocol/display/UUID tracking keys from custom_data when saving so the server treats the item as new. May cause the server to delete the item; off by default."
+  "config.infinity_item_editor_re.strip_server_tags.description": "Remove WLProtocol/display/UUID tracking keys from custom_data when saving so the server treats the item as new. May cause the server to delete the item; off by default.",
+  "message.infinity_item_editor_re.editor_unencodable": "This item has components that cannot be sent to the server; save cancelled."
 }

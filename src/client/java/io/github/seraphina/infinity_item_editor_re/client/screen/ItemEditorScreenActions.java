@@ -16,6 +16,7 @@ import io.github.seraphina.infinity_item_editor_re.client.CreativeTabRefresher;
 import io.github.seraphina.infinity_item_editor_re.data.realms.RealmController;
 import io.github.seraphina.infinity_item_editor_re.util.GiveHelper;
 import io.github.seraphina.infinity_item_editor_re.util.PlayerInventorySlots;
+import io.github.seraphina.infinity_item_editor_re.util.NetworkSafeStacks;
 import io.github.seraphina.infinity_item_editor_re.util.SaveVerifier;
 import io.github.seraphina.infinity_item_editor_re.util.ServerTagStripper;
 import net.minecraft.ChatFormatting;
@@ -280,6 +281,11 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
         restoreLostComponents();
         if (Config.getStripServerTags()) {
             ServerTagStripper.strip(this.previewStack);
+        }
+        this.previewStack = NetworkSafeStacks.sanitize(this.previewStack);
+        if (this.previewStack.isEmpty()) {
+            this.status = Component.translatable(messageKey("editor_unencodable"));
+            return;
         }
 
         int selected = this.minecraft.player.getInventory().getSelectedSlot();

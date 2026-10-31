@@ -13,27 +13,27 @@ Infinity Item Editor Re 是一个面向 **Minecraft 1.21.8 Fabric** 的客户端
 | Fabric API | 0.136.1+1.21.8（编译使用，运行需同版本或更新） |
 | Java | 21 |
 | Mod ID | `infinity_item_editor_re` |
-| 版本 | `1.21.8-Fabric-1.6.9-A` |
+| 版本 | `1.21.8-Fabric-1.7.0-A` |
 | 许可证 | GNU GPL 3.0 |
 
 构建产物：
 
 ```text
-build/libs/infinity_item_editor_re-1.21.8-Fabric-1.6.9-A.jar
+build/libs/infinity_item_editor_re-1.21.8-Fabric-1.7.0-A.jar
 ```
 
 本仓库已附带构建好的产物（无需自行构建即可安装）：
 
 ```text
-dist/infinity_item_editor_re-1.21.8-Fabric-1.6.9-A.jar
-dist/infinity_item_editor_re-1.21.8-Fabric-1.6.9-A-sources.jar
+dist/infinity_item_editor_re-1.21.8-Fabric-1.7.0-A.jar
+dist/infinity_item_editor_re-1.21.8-Fabric-1.7.0-A-sources.jar
 ```
 
 ## 安装
 
 1. 安装 Minecraft 1.21.8 与 Fabric Loader（0.16.0+）。
 2. 将 [Fabric API](https://modrinth.com/mod/fabric-api)（0.136.1+1.21.8 或更新）放入 `mods`。
-3. 将 `infinity_item_editor_re-1.21.8-Fabric-1.6.9-A.jar` 放入 `mods`。
+3. 将 `infinity_item_editor_re-1.21.8-Fabric-1.7.0-A.jar` 放入 `mods`。
 4. 启动游戏，进入创造模式，手持物品按 `U` 打开编辑器。
 
 完整使用教程见 **[docs/USAGE.md](docs/USAGE.md)**（面板说明、快捷键、配置、排错）。
@@ -72,6 +72,13 @@ $env:JAVA_HOME = 'C:\Program Files\Java\jdk-21.0.11'
 ```
 
 ## 更新记录
+
+### 1.7.0（修复取物品时连接崩溃）
+
+- 修复从 Realm/Void 标签页取出服务器物品时 `Failed to encode packet 'serverbound/minecraft:set_creative_mode_slot'` 崩溃：物品里存在无法用网络流编码的组件。
+- 新增 `NetworkSafeStacks`：写入标签页/保存发包前先做一次真实编码测试，剔除无法编码的组件（日志记录被剔除的组件），必要时取消保存并提示。
+- 标签页里的自定义物品（Realm/Void）会先净化再展示，取出不再炸客户端。
+
 
 ### 1.6.9（实验性“去除服务器标记”）
 

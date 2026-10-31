@@ -552,5 +552,6 @@
   "message.infinity_item_editor_re.editor_save_sent": "已发送保存请求：%s（服务端接受后生效）",
   "message.infinity_item_editor_re.editor_give_sent": "已通过 /give 发送：%s（需要服务器命令权限）",
   "config.infinity_item_editor_re.strip_server_tags.title": "去除服务器标记（实验）",
-  "config.infinity_item_editor_re.strip_server_tags.description": "保存时移除 custom_data 中的 WLProtocol/display/UUID 追踪字段，让服务器把物品当作新物品。可能导致服务器删除物品，默认关闭。"
+  "config.infinity_item_editor_re.strip_server_tags.description": "保存时移除 custom_data 中的 WLProtocol/display/UUID 追踪字段，让服务器把物品当作新物品。可能导致服务器删除物品，默认关闭。",
+  "message.infinity_item_editor_re.editor_unencodable": "该物品包含无法发送到服务器的组件，已取消保存。"
 }
