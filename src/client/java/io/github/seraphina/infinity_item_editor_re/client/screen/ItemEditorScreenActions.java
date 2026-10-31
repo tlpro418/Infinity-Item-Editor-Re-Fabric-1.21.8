@@ -481,7 +481,9 @@ abstract class ItemEditorScreenActions extends ItemEditorScreenColorLore {
             tryApplyDamage(true);
             applyNameToStack();
             applyLoreToStack();
-            LegacyPluginCompat.sync(this.previewStack, this.nameValue, this.loreValues);
+            if (Boolean.getBoolean("infinity_item_editor_re.syncLegacyPluginData")) {
+                LegacyPluginCompat.sync(this.previewStack, this.nameValue, this.loreValues);
+            }
             if (this.activePanel == Panel.SIGN) {
                 applySignToStack();
             }

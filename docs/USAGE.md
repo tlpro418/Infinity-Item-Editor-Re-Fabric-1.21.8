@@ -1,6 +1,6 @@
 # Infinity Item Editor Re — 1.21.8 Fabric 详细使用教程
 
-> 适用于本仓库构建的 `infinity_item_editor_re-1.21.8-Fabric-1.6.6-A.jar`。
+> 适用于本仓库构建的 `infinity_item_editor_re-1.21.8-Fabric-1.6.7-A.jar`。
 > 这是一个**客户端** Mod：服务端通常不用装，但写入物品栏、复制装备等功能需要创造模式权限。
 
 ---
@@ -9,7 +9,7 @@
 
 1. 安装 **Minecraft 1.21.8** + **Fabric Loader 0.20.1 或更新**。
 2. 下载 [Fabric API](https://modrinth.com/mod/fabric-api) `0.136.1+1.21.8` 或更新，放进 `mods`。
-3. 把 `infinity_item_editor_re-1.21.8-Fabric-1.6.6-A.jar` 放进 `mods`。
+3. 把 `infinity_item_editor_re-1.21.8-Fabric-1.6.7-A.jar` 放进 `mods`。
 4. 启动游戏。`mods` 里应能看到 “Infinity Item Editor Re”。
 
 > 只有客户端需要装；联机时服务器没有这个 Mod 也能用，但「保存到物品栏」等操作仍受服务器规则和创造模式权限限制。

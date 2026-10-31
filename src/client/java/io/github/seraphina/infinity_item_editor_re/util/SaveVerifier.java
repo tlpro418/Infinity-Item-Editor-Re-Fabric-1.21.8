@@ -52,6 +52,13 @@ public final class SaveVerifier {
                 expectedNbt, current);
         minecraft.player.displayClientMessage(
                 Component.translatable("message." + ModSource.MODID + ".editor_server_rewrote"), false);
+        String diagnostic = "sent=" + expectedNbt + " | received=" + current;
+        minecraft.player.displayClientMessage(
+                Component.translatable("message." + ModSource.MODID + ".editor_diagnostic_link")
+                        .withStyle(style -> style
+                                .withClickEvent(new net.minecraft.network.chat.ClickEvent.CopyToClipboard(diagnostic))
+                                .withColor(net.minecraft.ChatFormatting.AQUA)),
+                false);
         if (sentStack != null && !sentStack.isEmpty()) {
             minecraft.keyboardHandler.setClipboard(GiveHelper.getStringFromItemStack(sentStack));
             minecraft.player.displayClientMessage(

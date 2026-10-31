@@ -546,5 +546,6 @@
   "screen.infinity_item_editor_re.spawnegg.choice.empty": "(none)",
   "screen.infinity_item_editor_re.title": "Infinity Item Editor Re",
   "message.infinity_item_editor_re.editor_server_rewrote": "The server rewrote the saved item (plugin/ViaVersion limit). Use Shift+Drop to copy /give.",
-  "message.infinity_item_editor_re.editor_give_copied": "Copied the /give command for the item to the clipboard."
+  "message.infinity_item_editor_re.editor_give_copied": "Copied the /give command for the item to the clipboard.",
+  "message.infinity_item_editor_re.editor_diagnostic_link": "[Click to copy diagnostics]"
 }

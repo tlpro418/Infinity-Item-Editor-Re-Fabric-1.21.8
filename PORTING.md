@@ -92,6 +92,12 @@ Forge 1.20.1 的 `master` 仅用于对照功能行为。
 - `ContainerHelper#loadAllItems/saveAllItems` 改为 `ValueInput` / `ValueOutput`
   （使用 `TagValueInput.create` / `TagValueOutput.createWithContext`）
 
+## 1.6.7 修复记录（回滚 WLProtocol 同步）
+
+- `LegacyPluginCompat.sync` 改为由系统属性 `infinity_item_editor_re.syncLegacyPluginData` 控制，默认 **false**。
+  现场反馈：该同步会让部分服务端把物品判定为被篡改并整体重置。
+- `SaveVerifier` 增加可点击的诊断消息（`ClickEvent.CopyToClipboard`），一键复制 `sent=` / `received=`。
+
 ## 1.6.5 修复记录（WLProtocol 服务器字段）
 
 - 新增 `util/LegacyPluginCompat`：当物品 `custom_data` 中存在 `WLProtocol*` 键时，把编辑后的名称/Lore 写回
